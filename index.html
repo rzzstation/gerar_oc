@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Despacho">
-  <link rel="apple-touch-icon" href="icon.png"> <!-- Substitua por um ícone real se desejar -->
+  <link rel="apple-touch-icon" href="icon.png">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -50,16 +49,17 @@
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
-      margin-bottom: 10px;
     }
     button:hover {
       background-color: #135ca4;
     }
-    .view-button {
-      background-color: #4caf50;
-    }
-    .view-button:hover {
-      background-color: #3e8e41;
+    .link-ocorrencias {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      text-decoration: none;
+      color: #1976d2;
     }
   </style>
 </head>
@@ -84,10 +84,16 @@
     <textarea id="descricao" name="descricao" rows="4" required></textarea>
 
     <button type="submit">Registrar Despacho</button>
-    <button type="button" class="view-button" onclick="window.open('https://docs.google.com/spreadsheets/d/10pmk4n5NSNvWx-Br2FI-KUKyHclm-FNI0sMHwlQmKBE/edit?usp=sharing', '_blank')">Visualizar Ocorrências</button>
   </form>
 
+  <a href="https://docs.google.com/spreadsheets/d/10pmk4n5NSNvWx-Br2FI-KUKyHclm-FNI0sMHwlQmKBE/edit?usp=sharing" class="link-ocorrencias" target="_blank">Visualizar Ocorrências</a>
+
   <script>
+    // Define a data e hora atuais automaticamente
+    const now = new Date();
+    const formattedNow = now.toISOString().slice(0,16);
+    document.getElementById("dataHora").value = formattedNow;
+
     document.getElementById("despachoForm").addEventListener("submit", function(event) {
       event.preventDefault();
 
@@ -99,7 +105,7 @@
         descricao: document.getElementById("descricao").value
       };
 
-      const url = "https://script.google.com/macros/s/AKfycbyZtJ7xuAkPyg8SS7rd6kV5fr2Dfn9XhOVWfvf6OF0Q9Kf6vWiQquI1PGzzwBDSVagy/exec"; // Substitua com sua URL real
+      const url = "https://script.google.com/macros/s/AKfycbyZtJ7xuAkPyg8SS7rd6kV5fr2Dfn9XhOVWfvf6OF0Q9Kf6vWiQquI1PGzzwBDSVagy/exec";
 
       fetch(url, {
         method: "POST",
@@ -111,6 +117,7 @@
       }).then(() => {
         alert("Despacho registrado com sucesso!");
         document.getElementById("despachoForm").reset();
+        document.getElementById("dataHora").value = new Date().toISOString().slice(0,16);
       }).catch((err) => {
         alert("Erro ao registrar: " + err.message);
       });
