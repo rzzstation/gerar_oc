@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-3">
+  <meta charset="UTF-8">
   <title>Despacho de Guarnição</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -89,10 +89,18 @@
   <a href="https://docs.google.com/spreadsheets/d/10pmk4n5NSNvWx-Br2FI-KUKyHclm-FNI0sMHwlQmKBE/edit?usp=sharing" class="link-ocorrencias" target="_blank">Visualizar Ocorrências</a>
 
   <script>
-    // Define a data e hora atuais automaticamente
-    const now = new Date();
-    const formattedNow = now.toISOString().slice(0,16);
-    document.getElementById("dataHora").value = formattedNow;
+    // Função para pegar a hora de Brasília (UTC-3)
+    function getBrasiliaDateTimeLocalString() {
+      const now = new Date();
+      const brasiliaOffset = -3 * 60; // UTC-3 em minutos
+      const localOffset = now.getTimezoneOffset(); // em minutos
+      const diff = (brasiliaOffset - localOffset) * 60000;
+      const brasiliaTime = new Date(now.getTime() + diff);
+      return brasiliaTime.toISOString().slice(0,16);
+    }
+
+    // Preenche o campo com a hora de Brasília
+    document.getElementById("dataHora").value = getBrasiliaDateTimeLocalString();
 
     document.getElementById("despachoForm").addEventListener("submit", function(event) {
       event.preventDefault();
@@ -117,7 +125,7 @@
       }).then(() => {
         alert("Despacho registrado com sucesso!");
         document.getElementById("despachoForm").reset();
-        document.getElementById("dataHora").value = new Date().toISOString().slice(0,16);
+        document.getElementById("dataHora").value = getBrasiliaDateTimeLocalString();
       }).catch((err) => {
         alert("Erro ao registrar: " + err.message);
       });
